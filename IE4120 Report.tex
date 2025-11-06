@@ -1,0 +1,972 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\geometry{margin=1in}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    {\Large \textbf{Nanyang Technological University}}\\[0.5cm]
+    {\large School of Electrical and Electronic Engineering}\\[1.5cm]
+    {\Huge \textbf{IE4120 Design Case Study 1}}\\[0.3cm]
+    {\LARGE \textbf{Optical Communication System Design using OptiSystem}}\\[2cm]
+    \begin{flushleft}
+    \textbf{Name:} Gao YuXiang \\[0.3cm]
+    \textbf{Matriculation No.:} U2221919J \\[0.3cm]
+    \textbf{Lab Location:} Communication Lab, S2-B4c-17 \\[0.3cm]
+    \textbf{Instructor:} Dr.A.Alphones \\[0.3cm]
+    \textbf{Submission Date:} Week 12, Friday, 11:59 PM \\[0.3cm]
+    \textbf{Date:} 26/10/2025 
+    \end{flushleft}
+    \vfill
+\end{titlepage}
+
+\section{Introduction}
+The purpose of this design case study is to understand the fundamental operation, performance limits, and design trade-offs of optical fiber communication systems using \textit{OptiSystem 14}. 
+The experiment introduces students to the complete workflow of optical system simulation, including transmitter configuration, fiber transmission modeling, and receiver analysis.
+
+\vspace{0.5cm}
+\noindent
+Through the simulation of both a basic fiber-optic link and a multi-channel wavelength-division-multiplexed passive optical network (WDM-PON), the objectives are:
+\begin{itemize}
+    \item To get familiar with the OptiSystem simulation environment
+    \item To learn the properties of various optical and optoelectronic devices
+    \item To learn the basic principles and limiting factors in desiging a simple fiber system
+    \item To analyze the system transmission performance through simulation results
+\end{itemize}
+
+\noindent
+Fiber-optic systems form the backbone of modern telecommunication infrastructure due to their high bandwidth, low loss, and immunity to electromagnetic interference. 
+Understanding their design principles through simulation provides insight into real-world challenges such as dispersion, power budgeting, and wavelength crosstalk. 
+This study, therefore, not only strengthens conceptual understanding of optical link theory but also develops practical design skills necessary for next-generation access networks such as WDM-PON
+
+\section{Simple Fiber-Optic Communication System}
+\subsection{System Overview}
+A baisc 10\,Gb/s fiber-optic link was designed to study transmission distance and link loss affect optic signal integrity. 
+\noindent
+And the system layout will be like: 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Important Data/Part1/Layout.png}
+    \caption{Schematic of an External-Modulated Optical Transmitter}\label{fig:simple_system}
+\end{figure}
+
+\noindent
+The NRZ Pulse Generator refers to the global parameter Sample rate using script mode by default. The Pseudo-Random Bit Sequence Generator refers to the global parameter Bit rate using script mode by default. 
+
+\vspace{0.5cm}
+\noindent
+Now I run the whole simulation and view the results from visulizers:
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/Part1/Oscillocope Visualization.png}
+        \caption{Oscilloscope}\label{fig:Oscillocope}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/Part1/Optical Spectrum.png}
+        \caption{OSA}\label{fig:Spectrum}
+    \end{subfigure} 
+    \hfill
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/Part1/Optical Time Domain.png}
+        \caption{Time Domain visulizers}\label{fig:timedomain}
+    \end{subfigure}
+    \caption{visulizers reuslts}
+\end{figure}
+
+\noindent
+Now, I will adjust OSA Resolution Bandwidth from 0.01nm to 0.1nm and this is the how spectrum changes:
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.32\textwidth}
+       \includegraphics[width=\textwidth]{Important Data/Part1/Optical Spectrum_0.1.png}
+        \caption{0.1$nm$}\label{fig:0.1} 
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.32\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/Part1/Optical Spectrum_0.01.png}
+        \caption{0.01$nm$}\label{fig:0.01}
+    \end{subfigure}
+    \caption{OSA with 0.1 and 0.01 BWR}
+\end{figure}
+
+\noindent
+The optical spectra obtained from the Optical Spectrum Analyzer (OSA) at different resolution bandwidths (RBW) demonstrate the trade-off between spectral resolution and signal smoothness.
+
+\vspace{0.5cm}
+\noindent
+When the RBW is set to 0.1m, he measured spectrum exhibits a smooth envelope with a higher apparent peak power ($\approx +1.17~\mathrm{dBm}$), as the analyzer integrates a broader range of frequency components within each measurement bin. This results in effective averaging of the signal and noise, thereby reducing the visible noise level but compromising the ability to resolve fine spectral details.
+
+\vspace{0.5cm}
+\noindent
+In contrast, when the RBW is reduced to 0.01 nm, the OSA captures the signal with finer wavelength discrimination, revealing sharper spectral features and increased noise fluctuations.The apparent peak power decreases ($\approx -0.89~\mathrm{dBm}$) because the narrower bandwidth collects less optical power per resolution element.
+
+\section{A complete Simple transmission system}
+\subsection{System Overview}
+A full end-to-end 10\,Gb/s link was assembled by adding receiver, filtering, power monitoring, and BER evaluation blocks to the transmitter and fiber channel. And the system layout is:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Important Data/Part2/Layout.png}
+    \caption{Schematic of a Simple Fiber-Optic Communication System}\label{fig:complete_system}
+\end{figure}
+
+\noindent
+From the layout we could see that the componenets are: Optical fiber, optical attunator as the passive and channels; PIN photodiode, Low-pass Bessel Filter as the receiver; Oscilloscipe, RF spectrum, BER as electrical visulizers and opticla power meter as optical visulizer. At the beginning, the fiber length is set to 50km with no power and no attunation, and for attunator has 0 dB. 
+
+\vspace{0.5cm}
+\noindent
+As always, the bit rate is set to 10\,\text{Gb/s}, and the Sequence length is set to 128 as well as smaples per bit is 64. And I will run the simulation and view the results from visulizers:
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.4\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/Part2/Exercise(a)_50_BER.png}
+        \caption{50$km$ fiber with BER analyzer}\label{fig:BER_50}
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.4\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/Part2/Exercise(a)_50_Q-factor.png}
+        \caption{50$km$ fiber with Q-factor}\label{fig:Q_50}
+    \end{subfigure}
+    \caption{BER results with 50km Fiber}
+\end{figure}
+
+\noindent
+From the BER analyze box, there are 5 values displayed: Q factor, Eye Height, Minimum BER, Threshold and Decision Instant at the Max Q-factor/Min BER, the parameter \textbf{Minimum BER} is a crucial parameter which is to evaluate the system tranmussion performance and in telecommunication transmissionm, The BER is the percentage of bits that have error relatiive to the totalnumber of bits received in transmission.
+
+\vspace{0.5cm}
+\noindent
+Thus, from 50km fiber with no attunation and power, the the maximum Q-factor is $10.6693$, the minimum BER is $7.05217\times10^{-27}$, the eye height is $7.10668\times10^{-5}~\mathrm{(a.u.)}$, the threshold is $6.24659\times10^{-5}~\mathrm{(a.u.)}$.The obtained results indicate excellent signal performance. A high Q-factor of $10.6693$ corresponds to an extremely low bit error rate of $7.05217\times10^{-27}$, implying nearly error-free transmission. The clear eye opening with an eye height of $7.10668\times10^{-5}~\mathrm{(a.u.)}$ confirms low noise and intersymbol interference. The threshold of $6.24659\times10^{-5}~\mathrm{(a.u.)}$ and decision instant of $0.53125~\mathrm{(bit~period)}$ show that the receiver sampling point is optimally aligned at the center of the bit period, ensuring reliable signal detection.
+
+\vspace{0.5cm}
+\noindent
+Now, I will explore how the effect of fiber length and link loss to this tranmission system:
+
+\subsubsection{Effect of the Fiber Length}
+Keep the attenuation of the fiber be to 0 db per km and I will set fiber length to 20km and 80km respectively to observe what happen to the eye-diagram and the BER
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Important Data/Part2/Exercise(a)_20_BER.png}
+        \caption{BER Pattern}\label{fig:ber_pattern}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Important Data/Part2/Exercise(a)_20_Q-factor.png}
+        \caption{Q-Factor Distribution}\label{fig:q_factor}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Important Data/Part2/Exercise(a)_20_miniBER.png}
+        \caption{Minimum BER Curve}\label{fig:min_ber}
+    \end{subfigure}
+    \caption{BER analyzer results: Eye diagram, Q-factor, BER in 20km }\label{fig:ber_group_20}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Important Data/Part2/Exercise(a)_80_BER.png}
+        \caption{BER Pattern}\label{fig:ber_pattern_80}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Important Data/Part2/Exercise(a)_80_Q-factor.png}
+        \caption{Q-Factor Distribution}\label{fig:q_factor_80}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Important Data/Part2/Exercise(a)_80_MinBER.png}
+        \caption{Minimum BER Curve}\label{fig:min_ber_80}
+    \end{subfigure}
+    \caption{BER analyzer results: Eye diagram, Q-factor, BER variation in 80km.}\label{fig:ber_group_80}
+\end{figure}
+
+\noindent
+Comparing those two groups with the original length of 50km, when the length of fiber increases from 20 to 80, the eye diagram becomes narrower and less open, indicating greater intersymbol interference, amplitude distortion and timing jitter. Quantiatively, only observing the 20km and 80km transmission system, the Q-factir decreases from 16.7574 to 7.47289, while the  minimum BER deterorates from $2.50156\times10^{-63}$ to $3.88598\times10^{-14}$. The eye height also drops from $8.23612\times10^{-4}$ to $5.02337\times10^{-4}$~(a.u.), it shows that a smaller decision margin and a lower optical signal-to-noise ratio. 
+
+\vspace{0.5cm}
+\noindent
+These degenrations occur mainly due to the chromatic dispersion considering the fiber attunation is diabled (set to 0 as the question required), chromatic dispersion causes wavelength components of each optical pulsess to travel at different groupl velocities, thus, over a long distances, this leads to pulse spreading and overlap between adjacent bits, closing the eye amd reducing decision margin would be inevitable. 
+
+\vspace{0.5cm}
+\noindent
+As for the potential solutions to extend the tranmission length meanwhile alleviate the signal degenrations, by applying dispersion management, pre-chirp compensation and DSP-based equalization, the transmission distance could be extended while maintaiing low BER and good eye quality. 
+
+\vspace{0.5cm}
+\noindent
+Meanwhile, A table contains the 5 values in BER box with 20km, 50km and 80km fiber lengths could be better understaing the changes of eye diagram: 
+
+\begin{table}[H]
+\centering
+\caption{Comparison of BER Analyzer Results at Different Fiber Lengths}
+\label{tab:ber_comparison}
+\begin{tabular}{lccc}
+\hline
+\textbf{Parameter} & \textbf{20 km Fiber} & \textbf{50 km Fiber} & \textbf{80 km Fiber} \\
+\hline
+Max. Q Factor & 16.7574 & 10.6693 & 7.47289 \\
+Min. BER & 2.50156$\times$10$^{-63}$ & 7.05217$\times$10$^{-27}$ & 3.88598$\times$10$^{-14}$ \\
+Eye Height (a.u.) & 8.23612$\times$10$^{-4}$ & 7.10668$\times$10$^{-5}$ & 5.02337$\times$10$^{-4}$ \\
+Threshold (a.u.) & 4.54805$\times$10$^{-4}$ & 6.24659$\times$10$^{-5}$ & 5.78778$\times$10$^{-4}$ \\
+Decision Instant (bit period) & 0.671875 & 0.53125 & 0.53125 \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Effect of the Link Loss}
+Keep the length and attunation of optical fiber as 30km and 0.2db/km. And I will set optical attunator to 0dB, 3dB and 6dB. 
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Important Data/Part2/Exercise(b)_0_BER.png}
+        \caption{BER Pattern}\label{fig:ber_pattern_b0}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Important Data/Part2/Exercise(b)_0_Q-factor.png}
+        \caption{Q-Factor Distribution}\label{fig:q_factor_b0}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Important Data/Part2/Exercise(b)_0_MinBER.png}
+        \caption{Minimum BER Curve}\label{fig:min_ber_b0}
+    \end{subfigure}
+    \caption{BER, Q-factor variation, and Min BER with 0dB attunation.}\label{fig:ber_group_b0}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Important Data/Part2/Exercise(b)_3_BER.png}
+        \caption{BER Pattern}\label{fig:ber_pattern_b3}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Important Data/Part2/Exercise(b)_3_Q-factor.png}
+        \caption{Q-Factor Distribution}\label{fig:q_factor_b3}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Important Data/Part2/Exercise(b)_3_MinBER.png}
+        \caption{Minimum BER Curve}\label{fig:min_ber_b3}
+    \end{subfigure}
+    \caption{BER, Q-factor variation, and Min BER with 3dB attunation.}\label{fig:ber_group_b3}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Important Data/Part2/Exercise(b)_6_BER.png}
+        \caption{BER Pattern}\label{fig:ber_pattern_b6}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Important Data/Part2/Exercise(b)_6_Q-factor.png}
+        \caption{Q-Factor Distribution}\label{fig:q_factor_b6}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Important Data/Part2/Exercise(b)_6_MinBER.png}
+        \caption{Minimum BER Curve}\label{fig:min_ber_b6}
+    \end{subfigure}
+    \caption{BER, Q-factor variation, and Min BER with 6dB attunation.}\label{fig:ber_group_b6}
+\end{figure}
+
+\noindent
+Comparing those figures with 0dB, 3dB and 6dB attunation settings while the optical fiber is setted as 0.2dB attunation as default. When it is at 0dB attunation, the eye is wide open with a clear and symmetrical shape, with distinct amplitude levels, the high and low logic levels are well seperated with eye hight ($9.19\times10^{-4}$ a.u.) is large, meaning there is a strong signal amplitude margin against noise. 
+
+\vspace{0.5cm}
+\noindent
+When it is at 3dB attunation, the eye begins to narrow vertically, indicating reduced signal amplitude as optical power drops by half. And we could observe that the noise becomes more visable near the eye's center with its eye height drops by nearly one order of magnitude to $\approx 9.39 \times 10^{-5}~\mathrm{(a.u.)}$, and Q-factor decreases to $\approx{10.9}$. Meanwhile, the upper and lower rails of the eye show more fluctuations, reflecting weaker SNR but still acceptable.
+
+\vspace{0.5cm}
+\noindent
+when it's at 6db attunation, however, the eye becomes noticablely compressed, with the vertical opening reduced by roughly another factor of two, its eye height drops further to $\approx 4.96 \times 10^{-5}~\mathrm{{a.u.}}$ and the Q-factor drops to $\approx 10.59$, and BER rises to $\approx 10^{-26}$, showing significant performance degradations. 
+
+\vspace{0.5cm}
+\noindent
+Therefore, when the attunation increases from 0dB to 6dB, the eye height decreases, and the eye opening closes vertically, representing reduced signal amplitude and optical SNR and Optical Opwer drops when it changes from 3dB to 6dB, however, when it is from 3dB to 6dB, the changes is not as dramatic as 0dB to 3dB, the signal degradation is marginal, the eye opening shrinks modestly and BER rises slight but the system still operates in a stable, high-quality regime. 
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Important Data/Part2/Exercise(b)_3_Optical Power.png}
+        \caption{Optical Power at 3~dB attenuation}\label{fig:optical_power_b3}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Important Data/Part2/Exercise(b)_6_Optical Power.png}
+        \caption{Optical Power at 6~dB attenuation}\label{fig:optical_power_b6}
+    \end{subfigure}
+    \caption{Optical Power Meter readings at different fiber attenuation levels.}\label{fig:optical_power_group}
+\end{figure}
+
+\vspace{0.5cm}
+\noindent
+Meanwhile, a table contains 5 values in BER box with 0dB, 3dB and 6dB attunation would be shown to better undstand the changes:
+
+\begin{table}[H]
+\centering
+\caption{BER Analyzer Results at Different Fiber Attenuations}
+\label{tab:ber_attenuation}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{c c c c c c}
+\hline
+\textbf{Atten. (dB)} & \textbf{Q Factor} & \textbf{Min. BER} & \textbf{Eye Height} & \textbf{Threshold} & \textbf{Decision Inst.} \\
+\hline
+0 & 12.0017 & $1.68\times10^{-33}$ & $9.19\times10^{-4}$ & $1.11\times10^{-4}$ & 0.6406 \\
+3 & 10.8995 & $5.59\times10^{-28}$ & $9.39\times10^{-5}$ & $5.50\times10^{-5}$ & 0.6250 \\
+6 & 10.5937 & $1.53\times10^{-26}$ & $4.69\times10^{-5}$ & $2.68\times10^{-5}$ & 0.6094 \\
+\hline
+\end{tabular}%
+}
+\end{table}
+
+\section{Design of WDM-PON}
+\subsection{Architecture and Objectives}
+A bidirectional wavelenght-multiplexed passive optical network (WDM-PON) was designed to delive 10Gb/s per channel using four optical network units (ONUs) and a single optical line terminal (OLT). The system employs one bidrectional feeder fiber connected through a $4\times4$ bidirectional arrayed-waveguide grating (AWG) located at the remoted node (RN). Each ONU is assigned a delicated wavelength for both downstream and upstream transmission, with 100GHz channel spacing ($\approx0.8$ nm). The goal is to obtrain eye diagram with BER below $10\times{-12}$ in both directions.
+
+\vspace{0.5cm}
+\noindent
+In this part, I first tried the reference given by manual with 2 feeder fiber and tested the system with different bandwidth of Mux/DeMux and AWG to 120GHz to observe the changes in eye diagrams. Besides, due to the computer technical issues, I didn't build ONUs and OLT modules based on that ONU and OLT modules are just made the whole system look neat and clean. Therefore, the system layout with two feeder fiber looks like:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Important Data/WDM-PON/WDM-PON Layout .png}
+    \caption{Layout of WDM-PON with 2 feeder fibers}\label{fig:2_feeder}
+\end{figure}
+
+\subsubsection{Bandwidth=60GHz/120GHz}
+In the uplink module (OLT), the bandwidth of WDM MUX is 60GHz and with 4 different wavelengths, they are 1550nm, 1550.8nm, 1551.6nm and 1552.4nm respectievly; and for WDM transmitter, the frequency is 1550nm with 0.8nm speacing. On the other hand, WDM DeMUX also has 60GHz bandwidth with 4 different wavelengths: 1553.2nm, 1554nm, 1554.8nm and 1555.6nm.
+
+\vspace{0.5cm}
+\noindent
+4 optical receivers with APD photodiode and 4.5 Grain are connected with 1x4 WDM DeMux and it has 4 BER analyzer with it. For ONU module, it is made by 2 components: optical receivers and optical transmitter, optical receivers in ONU has the same setting as in OLT, and optical transmitters, each of transmitters has its own corresponding frequency. 
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}[b]{0.32\textwidth}
+    \includegraphics[width=\textwidth]{Important Data/WDM-PON/OLT Layout.png}
+    \caption{Subsystem layout of OLT}\label{fig:OLT_layout}
+  \end{subfigure}
+  \hspace{0.02\textwidth}
+  \begin{subfigure}[b]{0.48\textwidth}
+    \includegraphics[width=\textwidth]{Important Data/WDM-PON/ONU Layout.png}
+    \caption{Subsystem layout of ONU}\label{fig:ONU_layout}
+  \end{subfigure}
+  \caption{WDM-PON system subsystem designs: (a) OLT and (b) ONU}\label{fig:wdm_pon_subsystems}
+\end{figure}
+
+\noindent
+The manual for reference only asked to observe the downstream performance, therefore, those are the results: 
+
+\begin{table}[H]
+  \centering
+  \small
+  \caption{Results from BER Analyzers 4–7 with 60GHz(10\,Gb/s WDM Channels)}
+  \label{tab:ber_results}
+  \begin{tabular}{lccccc}
+    \toprule
+    \textbf{Analyzer} & \textbf{Q} & \textbf{Min BER} & \textbf{Eye Ht.} & \textbf{Thresh.} & \textbf{Dec. Inst.} \\
+    \midrule
+    BER\,4 & 29.76 & $5.6\times10^{-195}$ & 0.00150 & 0.00061 & 0.571 \\
+    BER\,5 & 27.24 & $9.5\times10^{-164}$ & 0.00149 & 0.00062 & 0.570 \\
+    BER\,6 & 24.25 & $2.3\times10^{-130}$ & 0.00096 & 0.00029 & 0.535 \\
+    BER\,7 & 26.66 & $6.4\times10^{-157}$ & 0.00148 & 0.00071 & 0.582 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \footnotesize
+  \caption{Results from BER Analyzers 4–7 with 120GHz(10\,Gb/s WDM Channels)}\label{tab:ber_results_120}
+  \begin{tabular}{lccccc}
+    \toprule
+    \textbf{Analyzer} & \textbf{Q} & \textbf{Min BER} & \textbf{Eye Ht.} & \textbf{Thresh.} & \textbf{Dec. Inst.} \\
+    \midrule
+    BER\,4 & 23.53 & $9.94\times10^{-123}$ & 0.00145 & 0.00064 & 0.578 \\
+    BER\,5 & 24.16 & $3.01\times10^{-129}$ & 0.00145 & 0.00059 & 0.598 \\
+    BER\,6 & 24.68 & $8.40\times10^{-135}$ & 0.00131 & 0.00053 & 0.566 \\
+    BER\,7 & 24.19 & $1.41\times10^{-129}$ & 0.00147 & 0.00070 & 0.578 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\noindent
+Comparing the data from two tables, it reveals subtle but important effects of bandwidth tuning on system performance. 
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON/ONU Analyzer Data/BER4.png}
+        \caption{BER 4}\label{fig:BER4}
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON/ONU Analyzer Data/BER5.png}
+        \caption{BER 5}\label{fig:BER5}
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON/ONU Analyzer Data/BER6.png}
+        \caption{BER 6}\label{fig:BER6}   
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON/ONU Analyzer Data/BER7.png}
+        \caption{BER 7}\label{fig:BER7}
+    \end{subfigure}
+    \caption{BER results for ONU @ 60GHz}
+\end{figure}
+
+\noindent
+When the bandwidth was set to 60 GHz, all channels achieved Q-factor above 27 with open and symmetrical eye diagrams. Crosstak was neglibile, and the BER remain in the range of $10^{-12} - 10^{-15}$, indicating that error-free transmission with strong signal margins. 
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON/ONU Analyzer Data/BER4_120Hz.png}
+        \caption{BER 4(120)}\label{fig:BER4_120}
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON/ONU Analyzer Data/BER5_120Hz.png}
+        \caption{BER 5(120)}\label{fig:BER5_120}
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON/ONU Analyzer Data/BER6_120Hz.png}
+        \caption{BER 6(120)}\label{fig:BER6_120}   
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON/ONU Analyzer Data/BER7_120Hz.png}
+        \caption{BER 7(120)}\label{fig:BER7_120}
+    \end{subfigure}
+    \caption{BER results for ONU @ 120GHz}
+\end{figure}
+
+\noindent
+When the bandwidth was set to 120 GHz, the system continued to operate error-free, from the data tables and BER analyzer figure15, it could see that Q-factor dropped modestly to an average of about 24 to 25, and the eye height decreased by roughly 10 - 15 percentage. The border passband allowed more power to pass through but also admiited a small amount of adjacent-channel energy, slightly closing the eye opening.
+
+\vspace{0.5cm}
+\noindent
+Overall, both bandwidths satify 10Gb/s transmission requirements, but the 60 GHz configuratioon provides superior optical isolation and higher Q-factor from the comparsion of table3 and table 4.
+
+\subsubsection{WDM-PON with one feeder fiber}
+\noindent
+After texting the WDM-PON system with different bandwidth, now I need to change the whole system from 2 feeder fibers to 1 feeder fiber. All I need to do it replace two one-way optical fiber with a bidirectional optical fiber, which the layout looks like:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.0\textwidth]{Important Data/WDM-PON(Part3)/Layout.png}
+    \caption{Schematic of a WDM-PON with one feeder fiber}\label{fig:onefeeder}
+\end{figure}
+
+\noindent
+At the left side of the AWG is OLT and at the right side of AWG are 4 groups of ONU units (I didn't put them in the subsystem due to the technical issues), and there is an additional optical delay between the bidirectional fiber and the bidriectional AWG for the uplink direction. 
+
+\vspace{0.5cm}
+\noindent
+I need to change iterations in layout parameters to 2 becuase the optical delay before running the program and the sihnal index need to be set to 1 for uplink eye diagram due to the optical delay. For the design requirements, it remains the same as the reference WDM-PON except the number of feeder fiber. 
+
+\newpage
+\vspace{0.5cm}
+\noindent
+Thus, the BER results are shown below:(with BER0-3 in uplink and BER4-7 in downlink)
+\vspace{0.5cm}
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Uplink/BER/BER Pattern.png}
+        \caption{BER Pattern}\label{BER0Pattern}
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Uplink/BER/Height.png}
+        \caption{BER Height}\label{BER0Height}     
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Uplink/BER/Min BER.png}
+        \caption{Min BER}\label{MinBER0}    
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Uplink/BER/Q factor.png}
+        \caption{Q0}\label{QBER0}      
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Uplink/BER/Threshold.png}
+        \caption{Threshold}\label{ThresholdBER0}       
+    \end{subfigure}
+    \caption{BER Results}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Uplink/BER1/BER Pattern.png}
+        \caption{BER Pattern}\label{BER1Pattern}
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Uplink/BER1/Height.png}
+        \caption{BER Height}\label{BER1Height}     
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Uplink/BER1/Min BER.png}
+        \caption{Min BER}\label{MinBER1}    
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Uplink/BER1/Q factor.png}
+        \caption{Q0}\label{QBER1}      
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Uplink/BER1/Threshold.png}
+        \caption{Threshold}\label{ThresholdBER1}       
+    \end{subfigure}
+    \caption{BER $1$ Results}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Uplink/BER2/BER Pattern.png}
+        \caption{BER Pattern}\label{BER2Pattern}
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Uplink/BER2/Height.png}
+        \caption{BER Height}\label{BER2Height}     
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Uplink/BER2/Min BER.png}
+        \caption{Min BER}\label{MinBER2}    
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Uplink/BER2/Q factor.png}
+        \caption{Q0}\label{QBER2}      
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Uplink/BER2/Threshold.png}
+        \caption{Threshold}\label{ThresholdBER2}       
+    \end{subfigure}
+    \caption{BER $2$ Results}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Uplink/BER3/BER Pattern.png}
+        \caption{BER Pattern}\label{BER3Pattern}
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Uplink/BER3/Height.png}
+        \caption{BER Height}\label{BER3Height}     
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Uplink/BER3/Min BER.png}
+        \caption{Min BER}\label{MinBER3}    
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Uplink/BER3/Q factor.png}
+        \caption{Q0}\label{QBER3}      
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Uplink/BER3/Threshold.png}
+        \caption{Threshold}\label{ThresholdBER3}       
+    \end{subfigure}
+    \caption{BER $3$ Results}
+\end{figure}
+
+\begin{table}[H]
+  \centering
+  \footnotesize
+  \caption{Measured parameters from BER Analyzers (Uplink OLT)}\label{tab:uplink_olt_ber}
+  \begin{tabular}{lccccc}
+    \toprule
+    \textbf{Analyzer} & \textbf{Max.\ Q Factor} & \textbf{Min.\ BER} & \textbf{Eye Height} & \textbf{Threshold} & \textbf{Decision Inst.} \\
+    \midrule
+    BER  & 25.3052 & $1.34\times10^{-141}$ & 0.00145455 & 0.000792985 & 0.59375 \\
+    BER 1 & 23.0449 & $7.93\times10^{-118}$ & 0.00144706 & 0.000817893 & 0.582031 \\
+    BER 2 & 22.8078 & $1.89\times10^{-115}$ & 0.00142884 & 0.000908289 & 0.589844 \\
+    BER 3 & 22.6952 & $2.29\times10^{-114}$ & 0.00145682 & 0.000691167 & 0.554688 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Downlink/BER4/BER Pattern.png}
+        \caption{BER Pattern}\label{BER4Pattern}
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Downlink/BER4/Height.png}
+        \caption{BER Height}\label{BER4Height}     
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Downlink/BER4/Min BER.png}
+        \caption{Min BER}\label{MinBER4}    
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Downlink/BER4/Min BER.png}
+        \caption{Q0}\label{QBER4}      
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Downlink/BER4/Threshold.png}
+        \caption{Threshold}\label{ThresholdBER4}       
+    \end{subfigure}
+    \caption{BER $4$ Results}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Downlink/BER5/BER Pattern.png}
+        \caption{BER Pattern}\label{BER5Pattern}
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Downlink/BER5/Height.png}
+        \caption{BER Height}\label{BER5Height}     
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Downlink/BER5/Min BER.png}
+        \caption{Min BER}\label{MinBER5}    
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Downlink/BER5/Q factor.png}
+        \caption{Q0}\label{QBER5}      
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Downlink/BER5/Threshold.png}
+        \caption{Threshold}\label{ThresholdBER5}       
+    \end{subfigure}
+    \caption{BER $5$ Results}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Downlink/BER6/BER Pattern.png}
+        \caption{BER Pattern}\label{BER6Pattern}
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Downlink/BER6/Height.png}
+        \caption{BER Height}\label{BER6Height}     
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Downlink/BER6/Min BER.png}
+        \caption{Min BER}\label{MinBER6}    
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Downlink/BER6/Q Factor.png}
+        \caption{Q0}\label{QBER6}      
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Downlink/BER6/Threshold.png}
+        \caption{Threshold}\label{ThresholdBER6}       
+    \end{subfigure}
+    \caption{BER $6$ Results}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Downlink/BER7/BER Pattern.png}
+        \caption{BER Pattern}\label{BER7Pattern}
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Downlink/BER7/Height.png}
+        \caption{BER Height}\label{BER7Height}     
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Downlink/BER7/Min BER.png}
+        \caption{Min BER}\label{MinBER7}    
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Downlink/BER7/Q factor.png}
+        \caption{Q0}\label{QBER7}      
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Downlink/BER7/Threshold.png}
+        \caption{Threshold}\label{ThresholdBER7}       
+    \end{subfigure}
+    \caption{BER $7$ Results}
+\end{figure}
+
+\begin{table}[H]
+  \centering
+  \footnotesize
+  \caption{Measured parameters from BER Analyzers (Downlink ONUs)}\label{tab:downlink_onu_combined}
+  \begin{tabular}{lccccc}
+    \toprule
+    \textbf{Analyzer} & \textbf{Max.\ Q Factor} & \textbf{Min.\ BER} & \textbf{Eye Height} & \textbf{Threshold} & \textbf{Decision Inst.} \\
+    \midrule
+    BER 4 & 29.0537 & $6.52\times10^{-186}$ & 0.00149978 & 0.000739096 & 0.585938 \\
+    BER 5 & 26.6086 & $2.41\times10^{-156}$ & 0.00148631 & 0.000655097 & 0.582031 \\
+    BER 6 & 28.3604 & $2.79\times10^{-177}$ & 0.00149917 & 0.000634886 & 0.574219 \\
+    BER 7 & 27.8490 & $4.84\times10^{-171}$ & 0.00149809 & 0.000595652 & 0.566406 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsubsection{Disussion and Explaination (for WDM-PON)}
+\noindent
+The complete BER and WDM analysis results confirm that the designed WDM-PON system provides excellent optical signal intergrity, stable transmission, and symmetrical performance in both the uplink and downlink directions. Each individual wavelength channel demonstrates high signal quality, with open eye diagram and extremely low BER and outstanding optical SNR. 
+
+\vspace{0.5cm}
+\noindent
+The uplink(OLT) results, including the BER and WDM analyzer outputs, comfirm that the system achieves excellent optical transmission quality. THe uplink BER analyzers exhibit Q-factor between 22.7dB and 25.3dB and BER values below $10^{-110}$, ensuring error-free operation. Eye diagrams are well-defined with minimal distortion, confirming low jitter and inter-symbol interference. On the other hand, The WDM analyzer further supports there results:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Important Data/WDM-PON(Part3)/Uplink/WDM.png}
+    \caption{WDM Analyzer}\label{WDM}
+\end{figure}
+
+\noindent
+the signal power remains consistent between -2.74 dBm and -2.68 dBm, with OSNR exceeding 97 dB and neglibile power variation (~0.06 dB) across the 1550 - 1552.4nm wavelength range. This demonstrates strong channel power equalization, minimal crosstalk and a clean optical spectrum (OSA will be shown in the Appendix). And the high OSNR correlates directly with the very low BER and High Q factor, validating that the multiplexing, fiber transmission in the uplink are highly optimized.
+
+\vspace{0.5cm}
+\noindent
+For Downlink (4 ONU units), all channles also perform within the Error-free range, showing Q-factors between 27.8 and 29.0 and BER values as low as $10^{-177}$. The uniform eye hight (~0.0015 a.u.) and consistent decision threhold condirm stable receiver sensitivity and effective AWG demultiplexing. 
+
+\vspace{0.5cm}
+\noindent
+Overall, the results demonstrate symmetric and stable system behavior between uplink and downlink. Together, these findings confirm that the designed WDM-PON system provides high-capacity, low-error optical tranmission with minimal signal degradation in both directions, meeting the requirements for reliable broadband optical access networks.
+
+\newpage
+\section{Appendix}
+\noindent
+1. Layout Parameters for building WDM-PON system (1 feeder fiber system)
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Important Data/WDM-PON(Part3)/Layout Parameters.png}
+    \caption{Layout Parameter}\label{layoutparameters}
+\end{figure}
+
+\noindent
+2. WDM-PON with 2 feeder fiber and OSAs for uplinks
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON/OLT Analyzer Data/Optical Spectrum.png}
+        \caption{OSA}\label{OAS}
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON/OLT Analyzer Data/Optical Spectrum 1.png}
+        \caption{OSA$1$}\label{OSA1}     
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON/OLT Analyzer Data/Optical Spectrum 2.png}
+        \caption{OSA$2$}\label{OSA2}    
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON/OLT Analyzer Data/Optical Spectrum 3.png}
+        \caption{OSA$3$}\label{OSA3}      
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON/OLT Analyzer Data/Optical Spectrum 4.png}
+        \caption{OSA$4$}\label{OSA4}       
+    \end{subfigure}
+    \caption{OSA results @ 60 GHz for uplink}
+\end{figure}
+
+\newpage
+\noindent
+3. WDM-PON with 2 feeder fiber and OSAs for downlinks
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON/Optical Spectrum 5.png}
+        \caption{OSA$5$}\label{OAS5}
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON/Optical Spectrum 6.png}
+        \caption{OSA$6$}\label{OSA6}     
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON/ONU Analyzer Data/Optical Spectrum 7.png}
+        \caption{OSA$7$}\label{OSA7}    
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON/ONU Analyzer Data/Optical Spectrum 8.png}
+        \caption{OSA$8$}\label{OSA8}      
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON/ONU Analyzer Data/Optical Spectrum 9.png}
+        \caption{OSA$9$}\label{OSA9}       
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON/ONU Analyzer Data/Optical Spectrum 10.png}
+        \caption{OSA$10$}\label{OSA10}       
+    \end{subfigure}
+    \caption{OSA results @ 60 GHz for downlink}
+\end{figure}
+
+\noindent
+4. WDM-PON with one feeder fiber: OSA reuslts
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Uplink/OPA.png}
+        \caption{OSA}\label{OAS_1}
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Uplink/OPA1.png}
+        \caption{OSA$1$}\label{OSA1_1}     
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Uplink/OPA2.png}
+        \caption{OSA$2$}\label{OSA2_1}    
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Uplink/OPA3.png}
+        \caption{OSA$3$}\label{OSA3_1}      
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Uplink/OPA4.png}
+        \caption{OSA$4$}\label{OSA4_1}       
+    \end{subfigure}
+    \vspace{0.5cm}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/OPA5.png}
+        \caption{OSA$5$}\label{OAS5_1}
+    \end{subfigure}
+    \caption{OSAs results part 1}
+\end{figure}
+
+\newpage
+\noindent
+5. WDM-PON with one feeder fiber: OSA results (cont')
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/OPA6.png}
+        \caption{OSA$6$}\label{OSA6_1}     
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Downlink/OPA7.png}
+        \caption{OSA$7$}\label{OSA7_1}    
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Downlink/OPA8.png}
+        \caption{OSA$8$}\label{OSA8_1}      
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Downlink/OPA9.png}
+        \caption{OSA$9$}\label{OSA9_1}       
+    \end{subfigure}
+    \hspace{0.02\textwidth}
+    \begin{subfigure}[b]{0.25\textwidth}
+        \includegraphics[width=\textwidth]{Important Data/WDM-PON(Part3)/Downlink/OPA10.png}
+        \caption{OSA$10$}\label{OSA10_1}       
+    \end{subfigure}
+    \caption{OSAs results part 2}
+\end{figure}
+
+\noindent
+The uplink OSA plots illustrates the spectral characteristics of the WDM channels tranmistted toward the OLT. The combined spectrum shows five distinct peaks withini 1500-1553nm range, confirming proper wavelength multiplexing across the C-band.
+
+\vspace{0.5cm}
+\noindent
+Individual specta display narrow,well-defined emission peaks centered near 1.552 micrometers with sharp roll-off, demonstrating effective filtering and minimal corsstalk between adjacent channels; and for downlink (OSA 5-10), illustrates the spectral profiles of demultiplexed WDM cahnnels received at the ONUs, each spectrum shows a narrow and well-isolated optical peak centered around 1551 - 1553nm, corresponding to the assigned WDM wavelengths. Overall, the downlink OSA results verify that each ONU receives its intended wavelength channel with stable power, proper spectral alignment and minimal distortion, ensuring reliable data recobery in the downlink path.
+
+\begin{thebibliography}{9}
+
+\bibitem{IE4120Manual}
+Nanyang Technological University, 
+\textit{IE4120 Design Manual 1}, 2024.
+
+\bibitem{OptiSystem}
+Optiwave Systems Inc., 
+\textit{OptiSystem 14 Documentation}, Ottawa, Canada, 2022.
+
+\end{thebibliography}
+
+\end{document}

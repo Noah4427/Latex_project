@@ -1,0 +1,188 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\geometry{margin=1in}
+\begin{document}
+\begin{titlepage}
+    \centering
+    {\Large \textbf{Nanyang Technological University}}\\[0.5cm]
+    {\large School of Electrical and Electronic Engineering}\\[1.5cm]
+    {\Huge \textbf{FYP Interim Report}}\\[0.3cm]
+    {\LARGE \textbf{Non-volatile Ferroelectric Photonic Memory for In-memory Photonic Computing}}\\[2cm]
+    \begin{flushleft}
+    \textbf{Name:} Gao YuXiang \\[0.3cm]
+    \textbf{Matriculation No.:} U2221919J \\[0.3cm]
+    \textbf{Supervisor: } Assoc Prof Arokiaswami Alphones (NTU EEE)\\[0.3cm]
+    \textbf{Co-Supervisor: } Dr.Dong BoWei (A*STAR-IME) \\[0.3cm]
+    \textbf{Examiner: } Prof Lee Yee Hui \\[0.3cm]
+    \textbf{Date: } \today
+    \end{flushleft}
+
+    \vspace{1cm}
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.9\textwidth]{Interim Report /NTULogo.png}
+    \end{figure}
+\end{titlepage}
+\newpage
+
+\section{\textbf{Introduction}}
+\noindent
+The rapid growth of data-driven technologies such as artificial intelligence, cloud computing, and high-performance systems has exposed the limitations of conventional CMOS-based electronic architectures—particularly resistive heating, bandwidth constraints, and latency in data transfer between logic and memory units. To overcome these bottlenecks, \textbf{photonic computing} has emerged as a promising alternative, offering ultrafast operation, high bandwidth, and low energy consumption.
+
+\vspace{0.5cm}
+\noindent
+A major challenge, however, lies in realizing \textbf{non-volatile optical memory} that can store information without constant electrical bias. \textbf{Ferroelectric materials}, especially \textbf{Al-doped HfO$_2$ (HAO)}, present a compelling solution due to their CMOS compatibility, switchable polarization, and low-power operation. Integrating such materials with silicon photonics could enable direct optical data storage, thereby minimizing conversion losses between optical and electronic domains.
+
+\vspace{0.5cm}
+\noindent
+This project investigates a \textbf{thin-film ferroelectric photonic memory} based on Al:HfO$_2$ integrated with silicon waveguides. The objective is to analyze how ferroelectric polarization alters carrier concentration and refractive index, enabling stable, reversible optical resonance modulation. By demonstrating non-volatile optical switching within a compact structure, this work contributes toward the development of scalable and energy-efficient \textbf{photonic in-memory computing} systems.
+
+\vspace{0.5cm}
+\noindent
+The interim phase focuses on simulation-based analysis using Silvaco TCAD and Lumerical MODE, establishing the correlation between ferroelectric polarization states and optical wavelength shift. Subsequent stages will expand toward parameter optimization and potential experimental validation.
+
+\section{\textbf{Work Done So Far}}
+\subsection{Device design and structure}
+The ferroelectric photonic memoery capactior was designed as a multilayer silicon waveguide structure, consisting of a silicon core, a 10 nm ferroelectric Al-doped $HfO_2$ (HAO) layer, and a transparent ITO electrode. The schematic below shows the simulated structure built using Silvaco ATHENA, where the Si core width is 0.5 µm, height 0.1 µm, and overall device width 0.7 µm.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.45\textwidth]{Interim Report /Waveguide structure .png}
+    \caption{Device Structure built in Silvaco ATHENA}\label{fig:structure}
+\end{figure}
+
+\subsection{Electrical Simulation (Silvaco TCAD ATLAS)}
+Electrical Simulation were performed to analyze the ferroelectric polarization switching and its effect on the carrier concentration within the silicon core. 
+
+\vspace{0.5cm}
+\noindent
+The device is biased under three conditions: +5V (erased state), -5V (programmed state), 1V (read state). The ferroelectric model used from paper were remanent polarization $P_r$ = $7.43~\mu\text{C/cm}^2$. 
+
+\vspace{0.5cm}
+\noindent
+As shown in the figure 2, the hole concentration in the silicon region exhibits a strong modulation near the HAO/Si interface due to polarization-induced charge redistribution; in the erased state, carrier accumulation occurs near the interface, while in the programmed state, depletion dominates — confirming successful non-volatile electrical switching.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Interim Report /Hole concentration figure.png}
+    \caption{Hole concentration distribution in erased and programmed states}\label{concentration}
+\end{figure}
+
+\subsection{Optical Mode Simulation (Lumerical MODE)}
+The 2D carrier profiles extracted from TCAD were imported into Lumerical MODE to evaluate the effect of polarization on the optical effective index.Simulations were conducted at 1550 nm using a transverse-electric (TE) mode solver. The computed effective indices were 2.563 (for erased) and 2.567 (for programmed). The mode profiles in Figure 3 illustrate strong confinement within the silicon core and negligible leakage into the ferroelectric or electrode layers, demonstrating effective optical guidance.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Interim Report /Lumerical Optical Mode profile.png}
+    \caption{Optical mode profiles for erased and programmed states}\label{Lumerical}
+\end{figure}
+
+\subsection{Simulation Setup and Data Extraction}
+Figure 4 shows the simulation schematic and mesh configuration in Lumerical MODE.
+The mesh grid was refined at the HAO/Si interface to capture the optical field variation accurately. Material parameters were assigned using a combination of empirical refractive-index data and TCAD-derived carrier-dependent dispersion. 
+
+\vspace{0.5cm}
+\noindent
+Figure 5 shows the hole concentration data extraction algorithm in Silvaco ATLAS. The Data is extracted by the setting of mesh in ATHENA, in my case, it's $0.1*0.05$. 
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Interim Report /Lumerical Schematic.png}
+    \caption{Simulation schematic and mesh configuration in Lumerical MODE}\label{fig:lumericalsetup}
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{Interim Report /data extraction.png}
+    \caption{Hole Concentration Data Extraction Script}\label{fig:data}
+\end{figure}
+
+\subsection{Device Structure Optimization}
+To receive a better results for wavelength-shift, I did the waveguide structure optimization. The orginal reference papar didn't mention the extact width of the waveguide, therefore, I believe that the width of waveguide could affect the hole concentraiton results so that the effective index results would be affected. 
+
+\vspace{0.5cm}
+\noindent
+Therefore, I set up a DOE table to change the width of waveguide from 700nm to 1800nm. And figure 6 shows the DOE table, also once I found the width of waveguide with the best wavelength-shift results, I will optimimzed the mesh setting in Limerical (for different mesh mesh in Lumerical could obtain different effective index values). In figure 7, it illustrates the mesh optimization (from $500*500$ to $1000*1000$), it turns out that mesh doesn't affect the result in obvious way but only the running time in Lumerical MODE. 
+\begin{figure}[H]
+    \centering 
+    \includegraphics[width=0.5\textwidth]{Interim Report /DOE.png}
+    \caption{DOE Table}\label{fig:DOE}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Interim Report /Mesh DOE.png}
+    \caption{Mesh Optimization in Lumerical MODE}\label{fig:mesh}
+\end{figure}
+
+\subsection{Summary of Achievements}
+In summary, the following milestones have been achieved throughout the project:
+\begin{itemize}
+    \item Successfully replicated the ferroelectric–silicon waveguide structure and simulation results reported in literature.
+    \item Implemented and verified ferroelectric polarization switching behavior using Silvaco TCAD.
+    \item Extracted and analyzed hole concentration distributions for both programmed and erased states.
+    \item Demonstrated effective refractive index modulation through Lumerical MODE simulations.
+    \item Established a unified workflow integrating electrical (TCAD) and optical (Lumerical) simulation domains.
+    \item Conducted preliminary device structure optimization for improved optical and memory performance.
+\end{itemize}
+
+\section{Future Work}
+\subsection{Script Optimization}
+In the Silvaco Script, there are some tiny mistakes in the ferro model settings, and I need to optimize the data extraction script, ideally there is a loop function to extract the data from hole concentraiton file automatically, however, i had trouble building it, and manually extracting is time-wasting considering the amount of dataset. This step is not difficult, in one-working data could be done. 
+
+\subsection{Device Optimization}
+After successfully replicated the results in literature, I need to optimize the results, considering the hole carriers in p-type silicon was not efficient when the ferroelectric layer is applied the external voltages, so that I came up a new design: p+/p/p+ home-structure, p+ region is also p-type silicon but with highly doped so that it could be a hole reservior for main silicon core. However, the hole concentration in the p+ region cannot be too high, othervise, it would be a conductor, vice versa; therefore, i need to find out one optimized the hole concentration to make the wavelength shift has the best results. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Interim Report /Device Optimization.png}
+    \caption{How I do Optimization}\label{fig:plan}
+\end{figure}
+
+\subsection{Device Testing and Data Analysis}
+Following simulation optimization, experimental validation will be conducted once fabricated samples are available. Optical transmission spectra, resonance shift, and hysteresis behavior will be measured to compare with simulated results. Data analysis will focus on correlating the observed wavelength shift with ferroelectric polarization states, retention characteristics, and endurance under cycling. Statistical analysis will be performed to evaluate device reliability and repeatability.
+
+\subsection{Expected Outcome}
+By completing this stage, the project aims to demonstrate a well-optimized ferroelectric photonic memory cell that exhibits measurable non-volatile optical modulation. The final results will provide quantitative insight into the relationship between ferroelectric polarization, carrier distribution, and optical index shift—paving the way for future integration of low-energy, non-volatile optical memory in photonic computing architectures.
+
+\section{Conclusion}
+
+This project has successfully demonstrated the design and simulation of a ferroelectric thin-film photonic memory device based on Al-doped HfO$_2$ integrated with silicon photonics. Through electrical simulations using \textbf{Silvaco TCAD} and optical analyses in \textbf{Lumerical MODE}, the study verified the feasibility of non-volatile optical modulation induced by ferroelectric polarization switching. The established workflow effectively links carrier redistribution with optical mode variation, forming a solid foundation for electro-optic coupling analysis.
+
+\vspace{0.5cm}
+\noindent
+Structure optimization has been completed, and preliminary results confirm distinct hole concentration redistribution and measurable refractive index shifts between programmed and erased states. These results validate the underlying mechanism of polarization-induced optical modulation in the designed waveguide structure.
+
+\vspace{0.5cm}
+\noindent
+The \textbf{device fabrication is carried out by A*STAR’s Institute of Microelectronics (IME)}, while this project focuses on the simulation framework, device optimization, and subsequent data testing and analysis. The next phase will involve validating simulation results with measured device data, extracting wavelength shift and endurance characteristics, and refining the model parameters accordingly.
+
+\vspace{0.5cm}
+\noindent
+Ultimately, this work contributes to the realization of low-power, non-volatile photonic memory elements that bridge electronic control with optical data processing—marking a key step toward integrated photonic in-memory computing systems.
+
+\vspace{1cm}
+\begin{thebibliography}{9}
+
+\bibitem{zhang2024}
+G.~Zhang, Y.~Chen, Z.~Zheng, R.~Shao, J.~Zhou, Z.~Zhou, L.~Jiao, J.~Zhang, H.~Wang, Q.~Kong, C.~Sun, K.~Ni, J.~Wu, J.~Chen, and X.~Gong, 
+``Thin film ferroelectric photonic-electronic memory,'' 
+\emph{Light: Science \& Applications}, vol.~13, p.~206, 2024.
+doi:\href{https://doi.org/10.1038/s41377-024-01555-6}{10.1038/s41377-024-01555-6}.
+
+\bibitem{yao2022}
+D.~Yao, L.~Li, Y.~Zhang, Y.~Peng, J.~Zhou, G.~Han, Y.~Liu, and Y.~Hao,
+``Energy-efficient non-volatile ferroelectric based electrostatic doping multilevel optical readout memory,''
+\emph{Optics Express}, vol.~30, no.~8, pp.~13572--13582, 2022.
+doi:\href{https://doi.org/10.1364/OE.456048}{10.1364/OE.456048}.
+
+\bibitem{guo2013}
+R.~Guo, L.~You, Y.~Zhou, Z.~S.~Lim, X.~Zou, L.~Chen, R.~Ramesh, and J.~Wang,
+``Non-volatile memory based on the ferroelectric photovoltaic effect,''
+\emph{Nature Communications}, vol.~4, p.~1990, 2013.
+doi:\href{https://doi.org/10.1038/ncomms2990}{10.1038/ncomms2990}.
+
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,193 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\geometry{margin=1in}
+\begin{document}
+
+\title{\textbf{EE6311 Assignment 3}}
+\author{Gao YuXiang (U2221919J)}
+\date{30/10/2025}
+\maketitle
+
+\section{Questions}
+\noindent
+1. Explain the mechanism behind optical modulators in terms of how bits of $1s$ and
+$0s$ can be translated from electronic to the photonic domain.
+
+\vspace{0.5cm}
+\noindent
+2. Highlight the essential design steps for a thin-film lithium niobate travelling-wave MZI
+modulator. Be creative and highlight what can be done to further increase the
+performance of the modulator in terms of modulation efficiency and bandwidth.
+
+\vspace{1cm}
+\section{Answers}
+\subsection{Question 1}
+\noindent
+A continuous-wave laser provides a steady optical input while the modulator imposes controlled changes in the light's intensity, phase or frequency according to the applied electrical signal. 
+
+\vspace{0.5cm}
+\noindent
+The fundamental physical principle relies on \textbf{electro-optic effect}, in which an applied electric field alters the refractive index of the modulating material and for example, lithium niobate, this is the \textbf{Pockels Effect}, expressed as 
+\[
+\Delta n = -\frac{1}{2} n^{3} r_{33} E
+\]
+
+\noindent
+where n is the refractive index, $r_{33}$ is the electro-optic coefficient, and E is the applied electric field by external electrodes. And the resulting refractive-index change produces a phase shift $\Delta \phi = 2 \pi \Delta n L / \lambda$ in the opticl wave. By controlling this phase difference between two optical paths, the device can modulate the overall output intensity. 
+
+\vspace{0.5cm}
+\noindent
+A common implementation is the Mach-Zehnder modulator (MZM). As shown in the Figure 1 below, A CW laser provides a steady optical input that is split equally into two waveguide arms. The electrical signal carrying digital bits drives electrodes placed along one or both arms. When a logic $'1'$ (high voltage) is applied, the induced electric field changes the refractive index of the material layer, introduing a $\pi$-phase shift between the two arms. When the beams recombine at the output coupler, the $\pi$-phase difference causes destructive interference and optical power drops - representing an optical $'0'$. 
+
+\vspace{0.5cm}
+\noindent
+When the input bit is $'0'$ (no or low voltage), there is no phase shit, and two optical paths remain in phase, which would cause constructive interference and maximum output representing an optical $'1'$. And the output intensity follows the transfer function
+
+\[
+I_{\text{out}} = I_0 \cos^2\!\left( \frac{\pi V}{V_{\pi}} \right)
+\]
+
+\noindent
+where $I_0$ is the input intensity, V is the applied voltage, and $V_{\pi}$ is the half-wave voltage required to induce $\pi$-phase shift.Thus, the binary electrical waveform is translated into optical power modulation, creating a digital light signal that carries the same information as electrical bits. 
+
+\vspace{0.5cm}
+\noindent
+Despite the case example above, depending on which optical property is modulated, binary $'1s'$ and $'0s'$ can be represented through intensity (on/off keying), phase (phase-shift keying), frequency (frequency-shift keying) or polarization (polarization-shift keying). And in the modern modulators, it also combine dimensions, ausch as amplitude and phase, to transmit more bits per symbol in advanced coherent communication systems. 
+
+\vspace{0.5cm}
+\noindent
+Fundamentally, all optical modualtors operate by changing the material's refractive index (or absorption index) under an applied electric field (or thermally), which modifies the phase or amplitude of the propagating light wave. This controlled changes forms the physic basis for translating electronic bits into optical signals in the photonic domain.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{Illustration.png}
+    \caption{Illustration of Principle}\label{fig:Illustration}
+\end{figure}
+
+\newpage
+\subsection{Question 2}
+\noindent
+The basic prinple of a travelling MZI modualtor is optical interference between two paths. And a thin-film $LiNbO_3$ travelling-wave MZI modualtor converts electrical RF/digital signal into optical intensity signal by using the Pockels effect. 
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.48\textwidth]{Travelling-wave modulator.png}
+    \caption{Travelling-wave MZI}\label{fig:travelling}
+\end{figure}
+
+\vspace{0.5cm}
+\noindent
+'Travelling-wave' means the RF/electrical signal does not just sit on a lumped capacitor, insteadm it propagatres along electrodes in the same diraction as the optical mode, so ling devices can still have wide electrical bandwidth.
+
+\subsubsection{Essential design steps}
+\noindent
+\textbf{First step}, it is to choose the platform and crystal orientation: LNOI, typically with x-cut or z-cut considering the molecular structure of Lithium Niobate so that the optical mode can experience the large $r_{33}$ coefficient which typically is 33 pm/V. the reasons why cut matters, it is becuase when a wafer is cut, it defines which axis line in the plane of the film and which is normal to it and the geometry decides the direction of the electric field that the electrodes can generate relative to the crystal axes. 
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.48\textwidth]{cut.png}
+    \caption{Z-cut vs Applied E}\label{fig:cut}
+\end{figure}
+
+\vspace{0.5cm}
+\noindent
+\textbf{Nest}, we form the on-chip interferometer: an input 50:50 coupler, two parallel $LiNbO_3$ waveguides, and an output coupler and the output intensity.
+
+\vspace{0.5cm}
+\noindent
+\textbf{Thridly}, we cover one or both MZI arms with electrodes to generate an electric field accorss the lithium niobate fim, the EO phase shift is: 
+
+\[
+\Delta \phi_{\mathrm{EO}} 
+= -\frac{2\pi}{\lambda} 
+\cdot \frac{1}{2} n^{3} r_{\mathrm{eff}} \, \Gamma \, \frac{V}{d} \, L
+\]
+
+\vspace{0.5cm}
+\noindent
+where $\lambda$ is the optical wavelength, $n$ is the refractive index of lithium niobate, 
+$r_{\mathrm{eff}}$ is the effective electro–optic coefficient, $\Gamma$ is the overlap factor between 
+the optical and RF fields, $V$ is the applied voltage, $d$ is the electrode spacing, 
+and $L$ is the interaction length of the phase shifter. From this, the half-wave voltage is: 
+
+\[
+V_{\pi} = \frac{\lambda d}{n^{3} r_{\mathrm{eff}} \Gamma L}
+\]
+
+\vspace{0.5cm}
+\noindent
+The classic trade-offs could be seen: longer L means lower half-wave voltage but more RF loss; smaller d means lower half-wave voltage but more optical absorption from the metal, higher overlap factor means bettwer efficiency.
+
+\vspace{0.5cm}
+\noindent
+\textbf{After that}, it is to implement push-pull configuration, drive the two MZI arms with opposite polarity, this could double the effective phase difference so that it could reduce $V_\pi$ by a factor of two, and improves the lineariry and thermal stability. 
+
+\vspace{0.5cm}
+\noindent
+\textbf{Furthermore},to support the high bandwidth, the \textbf{electrodes} are made as travelling-wave transmission line, replacing lumped electrodes with a coplanar waveguide or ground-signal-ground line, and there are three things needs to be satified: 
+
+\begin{itemize}
+    \item Characteristic Impdence $\approx$ 50 ohms
+    \item Velocity matching, mathc RF and optical velocitie: $n_{RF} \approx n_{opt}$ 
+    \item Co-propagtes RF and optical wvaes to achieve distributed modulation and $>$ 40 GHz bandwidth
+\end{itemize}
+
+\vspace{0.5cm}
+\noindent
+\textbf{Next}, it's to minimize total RF loss, total loss: $\alpha_{total} = \alpha_{c} + \alpha_{d} + \alpha_{r}$
+\begin{itemize}
+    \item reduce conductor loss ($\alpha_{c}$) using thick, low resistance metal
+    \item lower dielectric loss ($\alpha_{d}$) using low-loss oxide buffers
+    \item maintain good ground return and propoer termiantion. 
+\end{itemize}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.35\textwidth]{Loss.png}
+    \caption{Modulation Intensity vs Frequency in log}\label{fig:losspart}
+\end{figure}
+
+\vspace{0.5cm}
+\noindent
+\text{Finally}, it's to terminate the travellling-wave line with matched 50 ohms resistor to avoid reflections and standing waves and then do the packaging. Then, optimize and trade off between efficiency and bandwidth:
+\begin{itemize}
+    \item shorter electrode means higher bandwidth but higher half-wave voltage
+    \item longer electrode means lower $V_{\pi}$ but more RF attunuation
+    \item use simulation to balance both, desiging a DOE to find the balance electrode length with best resutls
+\end{itemize}
+
+\subsubsection{Further Increasement in modulation efficiency and bandwidth}
+\noindent
+For modulation efficiency, with the equation $V_{\pi} = \frac{\lambda d}{n^{3} r_{\mathrm{eff}} \Gamma L}$, maximize the RF overlap, typically, for lithium niobate, $\Gamma$ is from 0.7 to 0.9 so, any +10 percentage in $\Gamma$ or -10 percentage in half-wave voltage.
+
+\vspace{0.5cm}
+\noindent
+optimizing the electrode-waveguide spacing d is another option, making a spacing sweep: small d makes strong field, which could lower $V_\pi$, but too sall would cause metal absorption, so modulation efficiency could be done by choosing the smallest d that still keeps optical loss smaller than 0.2 to 0.3 dB. 
+
+\vspace{0.5cm}
+\noindent
+Furthermore, adding a thin high-index cap to pull the optical mode upward, which could have better overlap so that it could obtain a lower half-wave voltage. 
+
+\vspace{0.5cm}
+\noindent
+For increasing bandwidth. Tighter RF-optical velocity matching is an option: 
+
+\[
+  f_{3\mathrm{dB}} \approx \frac{0.45 c}{L \, |\Delta n|}.
+\]
+
+\vspace{0.5cm}
+\noindent
+and $\Delta n = n_{\mathrm{RF}} - n_{\mathrm{opt}}$, so everytime I cut $|\Delta n|$ by, e.g. 2, i will double the bandwidth. In the case, I could cut it through capactive loading on the CPW to slow RF wave or ridge loading to slightly increas $n_{opt}$ or employing thicker electrodes to lower $n_{RF}$.
+
+\vspace{0.5cm}
+\noindent
+Another way to increase the bandwidth, it is to reduce RF loss ($\alpha_{c}+\alpha_{d}$) by using thick, wide, low-resistivity Au to reduce the skin-effect loss or keeping the RF field mostly in low-loss Silicon Oxide to reduce the dielectric loss. On the other hands, A more advanced method to enhance performance is to implement segmented or re-driven travelling-wave electrodes, Instead of using a single long transmission line that suffers from increasing RF loss and phase mismatch over distance, the modulator can be divided into several shorter electrode sections separated by re-launch or re-drive points
+In this way, the device combines the advantages of low $V_\pi$ from a long interaction length with the wide bandwidth of short travelling-wave sections, achieving both high modulation efficiency and high-speed operation simultaneously.
+
+\vspace{0.5cm}
+\noindent
+\textbf{ALl in all}, the above mentions are just some of options to increase the performance of modulator in terms of the modulation efficiency and bandwidth. 
+\end{document}
