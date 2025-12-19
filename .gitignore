@@ -1,15 +1,46 @@
-# LaTeX
+cat <<EOF > .gitignore
+.DS_Store
 *.aux
 *.log
 *.out
-*.toc
-*.fdb_latexmk
-*.fls
 *.synctex.gz
-*.bbl
-*.blg
+*.toc
 *.lof
 *.lot
-*.idx
-*.ilg
-*.ind
+*.bbl
+*.blg
+*.run.xml
+*.fdb_latexmk
+
+*.pdf
+*.png
+*.jpg
+*.jpeg
+
+build/
+_build/
+EOF
+
+.DS_Store
+
+# LaTeX build junk
+*.aux
+*.log
+*.out
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# If you don't want to version logs
+Work log/
+**/Work log/
+
+# If you don't want to version PDFs/images (可选)
+*.pdf
+*.png
+*.jpg
+*.jpeg
+
+build/
+_build/
+
